@@ -1,0 +1,77 @@
+---
+import EventsSwiper from "./EventsSwiper";
+
+interface Props {
+  user: {
+    name: string;
+    id: number;
+  };
+}
+
+const daysEvents = [
+  {
+    day: 6,
+    events: [
+      {
+        id: 1,
+        startHour: "10",
+        startMinute: "00",
+        finishHour: "11",
+        finishMinute: "00",
+        title: "Desayuno",
+        assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
+      },
+      {
+        id: 3,
+        startHour: "15",
+        startMinute: "00",
+        finishHour: "16",
+        finishMinute: "00",
+        title: "Comida",
+        assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
+      },
+    ],
+  },
+  {
+    day: 7,
+    events: [
+      {
+        id: 2,
+        startHour: "10",
+        startMinute: "00",
+        finishHour: "11",
+        finishMinute: "00",
+        title: "Desayuno",
+        assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
+      },
+    ],
+  },
+  {
+    day: 8,
+    events: [
+      {
+        id: 4,
+        startHour: "10",
+        startMinute: "00",
+        finishHour: "11",
+        finishMinute: "00",
+        title: "Desayuno",
+        assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
+      },
+    ],
+  },
+];
+
+const { user } = Astro.props;
+---
+
+<h2 class="font-semibold text-center pb-5">Eventos</h2>
+<div class="mx-auto pb-10 relative">
+  <EventsSwiper client:load {...{ daysEvents, user }} />
+</div>
+
+<style>
+  h2 {
+    text-shadow: 4px 4px 5px #0005;
+  }
+</style>

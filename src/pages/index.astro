@@ -1,0 +1,55 @@
+---
+import Layout from "../layouts/Layout.astro";
+import DayPresentation from "../components/DayPresentation.astro";
+import Events from "../components/Events.astro";
+
+const tempRes = await fetch(
+  "https://www.el-tiempo.net/api/json/v2/provincias/30/municipios/30902"
+);
+const temp = await tempRes.json();
+const flagsRes = await fetch(
+  "https://web-app.112rmurcia.com/copla-service/copla/BeachFlag?idmun=30016"
+);
+const flags = await flagsRes.json();
+
+const user = {
+  name: "Vicks",
+  id: 1,
+};
+---
+
+<Layout title="Verano 2024">
+  <main>
+    <h1 class="mt-10 text-[40px] font-bold text-center lg:text-[60px]">
+      Verano 2024
+    </h1>
+    <div class="presentation">
+      <DayPresentation {...{ temp, flags, user }} />
+    </div>
+    <div class="pt-5 pl-5">
+      <Events {...{ user }} />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  h1 {
+    text-shadow: 4px 4px 5px #0005;
+    color: midnightblue;
+  }
+
+  .presentation {
+    text-shadow: 2px 2px 3px #0005;
+  }
+</style>
