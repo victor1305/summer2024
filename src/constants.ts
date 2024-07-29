@@ -36,3 +36,64 @@ export const dayName: { [key: number]: string } = {
   5: "Viernes",
   6: "Sábado",
 };
+
+export interface EventModalDefaultProps {
+  title: string;
+  startHour: string;
+  startMinute: string;
+  finishHour: string;
+  finishMinute: string;
+  assistants: string[];
+}
+
+export const eventModalDefault: EventModalDefaultProps = {
+  title: "",
+  startHour: "",
+  startMinute: "",
+  finishHour: "",
+  finishMinute: "",
+  assistants: [],
+};
+
+export const hours: string[] = Array.from({ length: 24 }, (_, i) =>
+  i.toString().padStart(2, "0")
+);
+export const minutes: string[] = Array.from({ length: 12 }, (_, i) =>
+  (i * 5).toString().padStart(2, "0")
+);
+
+export const assistants = [
+  {
+    name: "Alicia",
+  },
+  {
+    name: "Emilio",
+  },
+  {
+    name: "Bea",
+  },
+  {
+    name: "Povs",
+  },
+  {
+    name: "Tirso",
+  },
+  {
+    name: "Silvia",
+  },
+  {
+    name: "Dani Sr",
+  },
+  {
+    name: "Lau",
+  },
+  {
+    name: "Dani Jr",
+  },
+  {
+    name: "Jess",
+  },
+  {
+    name: "Vicks",
+  },
+];

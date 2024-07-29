@@ -14,19 +14,19 @@ const flags = await flagsRes.json();
 
 const user = {
   name: "Vicks",
-  id: 1,
+  id: "asdad",
 };
 ---
 
 <Layout title="Verano 2024">
   <main>
-    <h1 class="mt-10 text-[40px] font-bold text-center lg:text-[60px]">
-      Verano 2024
-    </h1>
+    <div class="flex logo:justify-center">
+      <img class="logo:max-w-[350px]" src="./logo.png" alt="Verano 2024" />
+    </div>
     <div class="presentation">
       <DayPresentation {...{ temp, flags, user }} />
     </div>
-    <div class="pt-5 pl-5">
+    <div class="pt-5 mx-auto">
       <Events {...{ user }} />
     </div>
   </main>
@@ -42,11 +42,6 @@ const user = {
     font-size: 20px;
     line-height: 1.6;
     min-height: 100vh;
-  }
-
-  h1 {
-    text-shadow: 4px 4px 5px #0005;
-    color: midnightblue;
   }
 
   .presentation {

@@ -5,7 +5,7 @@ import { ctcNames, seaNames } from "../constants";
 interface Props {
   user: {
     name: string;
-    id: number;
+    id: string;
   };
   temp: {
     stateSky: {
@@ -78,10 +78,10 @@ const getFlagData = (id: number) => {
   <ul class="text-base lg:flex lg:justify-center">
     <li class="pb-5 lg:pr-10">
       <p class="font-semibold flex lg:justify-center">
-        Playa Cavanna <svg
+        Cabo de Palos <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
-          style={{ fill: flaNames[getFlagData(1003586)?.flag] }}
+          style={{ fill: flaNames[getFlagData(1000625)?.flag] }}
           class="size-6 ml-3"
         >
           <path
@@ -90,12 +90,12 @@ const getFlagData = (id: number) => {
       </p>
       <p class="pl-3 lg:pl-0">
         Estado mar: <span class="font-semibold lg:pr-10"
-          >{seaNames[getFlagData(1003586)?.seaState]}</span
+          >{seaNames[getFlagData(1000625)?.seaState]}</span
         >
       </p>
       <p class="pl-3 lg:pl-0">
         Aforo: <span class="font-semibold lg:pr-10"
-          >{ctcNames[getFlagData(1003586)?.seaCapacity]}</span
+          >{ctcNames[getFlagData(1000625)?.seaCapacity]}</span
         >
       </p>
     </li>
@@ -104,7 +104,7 @@ const getFlagData = (id: number) => {
         Playa Galua<svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
-          style={{ fill: flaNames[getFlagData(1003586)?.flag] }}
+          style={{ fill: flaNames[getFlagData(1000624)?.flag] }}
           class="size-6 ml-3"
         >
           <path
@@ -128,7 +128,7 @@ const getFlagData = (id: number) => {
           Playa Azohía <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            style={{ fill: flaNames[getFlagData(1003586)?.flag] }}
+            style={{ fill: flaNames[getFlagData(1022925)?.flag] }}
             class="size-6 ml-3"
           >
             <path

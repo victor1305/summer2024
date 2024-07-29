@@ -1,31 +1,42 @@
 import type React from "react";
 import { dayName } from "../constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface DayEvent {
   day: number;
   events: Events[];
   user: {
     name: string;
-    id: number;
+    id: string;
   };
+  addEvent: (day: number, edit: boolean) => void;
+  preRemoveEvent: (day: number, id: string, name: string) => void;
+  editEvent: (day: number, elm: Events) => void;
 }
 
 interface Events {
-  id: number;
+  id: string;
   startHour: string;
   startMinute: string;
   finishHour: string;
   finishMinute: string;
   title: string;
   assistants: string[];
+  createdBy: string;
 }
 
-const Card: React.FC<DayEvent> = ({ day, events, user }) => {
+const Card: React.FC<DayEvent> = ({
+  day,
+  events,
+  user,
+  addEvent,
+  editEvent,
+  preRemoveEvent,
+}) => {
   const [eventsList, setEvents] = useState(events);
-  const [openEventId, setOpenEventId] = useState<number | null>(null);
+  const [openEventId, setOpenEventId] = useState<string | null>(null);
 
-  const updateEventAssistant = (eventId: number) => {
+  const updateEventAssistant = (eventId: string) => {
     setEvents((prevEvents) =>
       prevEvents.map((event) => {
         if (event.id === eventId) {
@@ -42,7 +53,7 @@ const Card: React.FC<DayEvent> = ({ day, events, user }) => {
     );
   };
 
-  const toggleEventVisibility = (eventId: number) => {
+  const toggleEventVisibility = (eventId: string) => {
     setOpenEventId(openEventId === eventId ? null : eventId);
   };
 
@@ -52,11 +63,37 @@ const Card: React.FC<DayEvent> = ({ day, events, user }) => {
     return dayName[dayNumber];
   };
 
+  useEffect(() => {
+    setEvents(events);
+  }, [events]);
+
   return (
-    <div className="max-w-[450px] h-[350px] overflow-y-auto p-4 border-gray-200 bg-gradient-to-r from-accent-dark-first to-accent-dark-second rounded">
+    <div className="max-w-[450px] relative h-[350px] overflow-y-auto p-4 border-gray-200 bg-gradient-to-r from-accent-dark-first to-accent-dark-second rounded">
       <h4 className="text-center underline pb-5 text-xl font-semibold">
         {getDayName()} {day}
       </h4>
+      <button
+        onClick={() => addEvent(day, false)}
+        className="bg-green-600 rounded-full p-1.5 absolute top-5 left-5"
+      >
+        <svg
+          fill="#fff"
+          version="1.1"
+          id="Capa_1"
+          xmlns="http://www.w3.org/2000/svg"
+          width="12px"
+          height="12px"
+          viewBox="0 0 94.49 94.49"
+        >
+          <g>
+            <path
+              d="M92.49,35.284H59.206V2c0-1.104-0.896-2-2-2H37.284c-1.104,0-2,0.896-2,2v33.284H2c-1.104,0-2,0.896-2,2v19.922
+		c0,1.104,0.896,2,2,2h33.284V92.49c0,1.104,0.896,2,2,2h19.922c1.104,0,2-0.896,2-2V59.206H92.49c1.104,0,2-0.896,2-2V37.284
+		C94.49,36.18,93.596,35.284,92.49,35.284z"
+            />
+          </g>
+        </svg>
+      </button>
       {eventsList.length === 0 ? (
         <p className="text-center text-base">Sin planes previstos</p>
       ) : (
@@ -65,9 +102,30 @@ const Card: React.FC<DayEvent> = ({ day, events, user }) => {
             key={`event-${day}-${index}`}
             className={`${index === eventsList.length - 1 ? "" : "pb-10"}`}
           >
-            <p className="text-base font-semibold underline">
-              ·{elm.startHour}:{elm.startMinute} - {elm.finishHour}:
-              {elm.finishMinute}
+            <p className="text-base font-semibold underline flex items-center pb-4">
+              <span>
+                ·{elm.startHour}:{elm.startMinute}{" "}
+                {elm.finishHour && elm.finishMinute
+                  ? `- ${elm.finishHour}:
+              ${elm.finishMinute}`
+                  : ""}
+              </span>
+              {(user.name === elm.createdBy || user.name === "Vicks") && (
+                <>
+                  <button
+                    className="ml-5 p-1.5 bg-blue-500 rounded-full"
+                    onClick={() => editEvent(day, elm)}
+                  >
+                    <img className="w-4" src="./edit.svg" alt="icono editar" />
+                  </button>
+                  <button
+                    className="ml-5 p-1.5 bg-red-500 rounded-full"
+                    onClick={() => preRemoveEvent(day, elm.id, elm.title)}
+                  >
+                    <img className="w-4" src="./trash.svg" alt="icono borrar" />
+                  </button>
+                </>
+              )}
             </p>
             <h4 className="text-lg font-semibold text-center flex justify-center">
               {elm.title} ({elm.assistants.length}){" "}
@@ -97,11 +155,7 @@ const Card: React.FC<DayEvent> = ({ day, events, user }) => {
                     fill="currentColor"
                     className="size-6"
                   >
-                    <path
-
-                      d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-
-                    />
+                    <path d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" />
                   </svg>
                 )}
               </button>

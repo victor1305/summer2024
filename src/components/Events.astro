@@ -4,7 +4,7 @@ import EventsSwiper from "./EventsSwiper";
 interface Props {
   user: {
     name: string;
-    id: number;
+    id: string;
   };
 }
 
@@ -13,22 +13,24 @@ const daysEvents = [
     day: 6,
     events: [
       {
-        id: 1,
+        id: "123",
         startHour: "10",
         startMinute: "00",
         finishHour: "11",
         finishMinute: "00",
         title: "Desayuno",
         assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
+        createdBy: 'Vicks'
       },
       {
-        id: 3,
+        id: "122",
         startHour: "15",
         startMinute: "00",
         finishHour: "16",
         finishMinute: "00",
         title: "Comida",
         assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
+        createdBy: 'Vicks'
       },
     ],
   },
@@ -36,13 +38,14 @@ const daysEvents = [
     day: 7,
     events: [
       {
-        id: 2,
+        id:"1223",
         startHour: "10",
         startMinute: "00",
         finishHour: "11",
         finishMinute: "00",
         title: "Desayuno",
         assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
+        createdBy: 'Vicks'
       },
     ],
   },
@@ -50,13 +53,14 @@ const daysEvents = [
     day: 8,
     events: [
       {
-        id: 4,
+        id: "12123",
         startHour: "10",
         startMinute: "00",
         finishHour: "11",
         finishMinute: "00",
         title: "Desayuno",
         assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
+        createdBy: 'Vicks'
       },
     ],
   },
@@ -66,7 +70,7 @@ const { user } = Astro.props;
 ---
 
 <h2 class="font-semibold text-center pb-5">Eventos</h2>
-<div class="mx-auto pb-10 relative">
+<div class="max-w-[450px] mx-auto pb-10 relative lg:max-w-full">
   <EventsSwiper client:load {...{ daysEvents, user }} />
 </div>
 

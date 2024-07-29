@@ -7,6 +7,9 @@ export default {
         'accent-dark-first': 'rgba(49, 10, 101, 0.66)',
         'accent-dark-second': 'rgba(49, 10, 101, 0.33)',
       },
+			screens: {
+				'logo': '400px'
+			}
 		},
 	},
 	plugins: [],
