@@ -2,6 +2,17 @@
 import Layout from "../layouts/Layout.astro";
 import DayPresentation from "../components/DayPresentation.astro";
 import Events from "../components/Events.astro";
+import { GET } from './api/events'
+
+import type { Locals } from "../types";
+
+const user = {
+  name: (Astro.locals as Locals).userName,
+  id: (Astro.locals as Locals).userId,
+};
+
+const eventsRes = await GET(Astro)
+const events = await eventsRes.json();
 
 const tempRes = await fetch(
   "https://www.el-tiempo.net/api/json/v2/provincias/30/municipios/30902"
@@ -11,11 +22,6 @@ const flagsRes = await fetch(
   "https://web-app.112rmurcia.com/copla-service/copla/BeachFlag?idmun=30016"
 );
 const flags = await flagsRes.json();
-
-const user = {
-  name: "Vicks",
-  id: "asdad",
-};
 ---
 
 <Layout title="Verano 2024">
@@ -27,7 +33,7 @@ const user = {
       <DayPresentation {...{ temp, flags, user }} />
     </div>
     <div class="pt-5 mx-auto">
-      <Events {...{ user }} />
+      <Events {...{ user, events }} />
     </div>
   </main>
 </Layout>

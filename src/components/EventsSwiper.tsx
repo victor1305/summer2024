@@ -13,6 +13,7 @@ import ConfirmModal from "./ConfirmModal";
 
 interface DayEvents {
   day: number;
+  _id: string;
   events: Events[];
 }
 
@@ -21,7 +22,7 @@ interface Events {
   startMinute: string;
   finishHour: string;
   finishMinute: string;
-  id: string;
+  _id: string;
   title: string;
   assistants: string[];
   createdBy: string;
@@ -43,34 +44,34 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
   const [idToEditOrRemove, setIdToEditOrRemove] = useState<string | null>(null);
   const [dayEvents, setDayEvents] = useState(daysEvents);
   const [eventForm, setEventForm] = useState(eventModalDefault);
-  const [day, setDay] = useState(0);
-  const addEvent = (day: number, edit: boolean) => {
-    setDay(day);
+  const [day, setDay] = useState<string | null>(null);
+  const addEvent = (dayId: string, edit: boolean) => {
+    setDay(dayId);
     setIsEdit(edit);
     setIsModalOpen(true);
   };
 
-  const editEvent = (day: number, event: Events) => {
-    setIdToEditOrRemove(event.id);
+  const editEvent = (dayId: string, event: Events) => {
+    setIdToEditOrRemove(event._id);
     setEventForm(event);
-    addEvent(day, true);
+    addEvent(dayId, true);
   };
 
-  const preRemoveEvent = (day: number, id: string, name: string) => {
+  const preRemoveEvent = (dayId: string, id: string, name: string) => {
     setEventName(name);
     setIdToEditOrRemove(id);
-    setDay(day);
+    setDay(dayId);
     setIsConfirmModalOpen(true);
   };
 
   const removeEvent = () => {
     setDayEvents((prevDayEvents) =>
       prevDayEvents.map((dayEvent) => {
-        if (dayEvent.day === day) {
+        if (dayEvent._id === day) {
           return {
             ...dayEvent,
             events: dayEvent.events.filter(
-              (event) => event.id !== idToEditOrRemove
+              (event) => event._id !== idToEditOrRemove
             ),
           };
         }
@@ -80,14 +81,24 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
     setIsConfirmModalOpen(false);
   };
 
-  const createForm = (isEdit: boolean, form: EventModalDefaultProps) => {
-    setDayEvents((prevDayEvents) => {
-      const updatedDayEvents = prevDayEvents.map((dayEvent) => {
-        if (dayEvent.day === day) {
-          if (isEdit) {
+  const createForm = async (isEdit: boolean, form: EventModalDefaultProps) => {
+    if (isEdit) {
+      const res = await fetch("http://localhost:4321/api/events", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const eventUpdated = await res.json();
+      setDayEvents((prevDayEvents) => {
+        const updatedDayEvents = prevDayEvents.map((dayEvent) => {
+          if (dayEvent._id === day) {
             const updatedEvents = dayEvent.events
               .map((event) =>
-                event.id === idToEditOrRemove ? { ...event, ...form } : event
+                event._id === idToEditOrRemove
+                  ? { ...event, ...eventUpdated }
+                  : event
               )
               .sort((a, b) => {
                 const timeA =
@@ -97,12 +108,29 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
                 return timeA - timeB;
               });
             return { ...dayEvent, events: updatedEvents };
-          } else {
-            const newEvent = {
-              ...form,
-              createdBy: user.name,
-              id: Math.random().toString(36).substr(2, 9), // Generar un id único
-            };
+          }
+          return dayEvent;
+        });
+        return updatedDayEvents;
+      });
+    } else {
+      const newEventObj = {
+        ...form,
+        createdBy: user.id,
+        day: day,
+      };
+      const res = await fetch("http://localhost:4321/api/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newEventObj),
+      });
+      const newEvent = await res.json();
+
+      setDayEvents((prevDayEvents) => {
+        const updatedDayEvents = prevDayEvents.map((dayEvent) => {
+          if (dayEvent._id === day) {
             const updatedEvents = [...dayEvent.events, newEvent].sort(
               (a, b) => {
                 const timeA =
@@ -114,11 +142,11 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
             );
             return { ...dayEvent, events: updatedEvents };
           }
-        }
-        return dayEvent;
+          return dayEvent;
+        });
+        return updatedDayEvents;
       });
-      return updatedDayEvents;
-    });
+    };
     closeModal();
   };
 
@@ -167,6 +195,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
             <Card
               {...{
                 day: elm.day,
+                dayId: elm._id,
                 events: elm.events,
                 user,
                 addEvent,

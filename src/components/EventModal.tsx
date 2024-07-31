@@ -133,8 +133,8 @@ const EventModal: React.FC<EventModalProps> = ({
                   <label>{elm.name}</label>
                   <input
                     type="checkbox"
-                    value={elm.name}
-                    checked={eventForm.assistants.includes(elm.name)}
+                    value={elm.id}
+                    checked={eventForm.assistants.includes(elm.id)}
                     onChange={handleCheckboxChange}
                   />
                 </div>

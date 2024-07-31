@@ -1,21 +1,22 @@
 import type React from "react";
-import { dayName } from "../constants";
+import { dayName, users } from "../constants";
 import { useEffect, useState } from "react";
 
 interface DayEvent {
   day: number;
+  dayId: string
   events: Events[];
   user: {
     name: string;
     id: string;
   };
-  addEvent: (day: number, edit: boolean) => void;
-  preRemoveEvent: (day: number, id: string, name: string) => void;
-  editEvent: (day: number, elm: Events) => void;
+  addEvent: (day: string, edit: boolean) => void;
+  preRemoveEvent: (day: string, id: string, name: string) => void;
+  editEvent: (day: string, elm: Events) => void;
 }
 
 interface Events {
-  id: string;
+  _id: string;
   startHour: string;
   startMinute: string;
   finishHour: string;
@@ -27,6 +28,7 @@ interface Events {
 
 const Card: React.FC<DayEvent> = ({
   day,
+  dayId,
   events,
   user,
   addEvent,
@@ -36,21 +38,44 @@ const Card: React.FC<DayEvent> = ({
   const [eventsList, setEvents] = useState(events);
   const [openEventId, setOpenEventId] = useState<string | null>(null);
 
-  const updateEventAssistant = (eventId: string) => {
+  const updateEventAssistant = async (eventId: string, updatedAssistants: string[]) => {
+    const res = await fetch(`http://localhost:4321/api/events/${eventId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ assistants: updatedAssistants }),
+    });
+    
+    if (!res.ok) {
+      console.error('Error updating event assistants:', res.statusText);
+      return;
+    }
+  
+    const eventUpdated = await res.json();
     setEvents((prevEvents) =>
       prevEvents.map((event) => {
-        if (event.id === eventId) {
-          const isAssistant = event.assistants.includes(user.name);
+        if (event._id === eventId) {
           return {
             ...event,
-            assistants: isAssistant
-              ? event.assistants.filter((name) => name !== user.name)
-              : [...event.assistants, user.name],
+            assistants: eventUpdated.assistants,
           };
         }
         return event;
       })
     );
+  };
+
+  const handleUpdateAssistant = async (eventId: string) => {
+    const event = events.find((event) => event._id === eventId);
+    if (!event) return;
+  
+    const isAssistant = event.assistants.includes(user.id);
+    const updatedAssistants = isAssistant
+      ? event.assistants.filter((id) => id !== user.id)
+      : [...event.assistants, user.id];
+  
+    await updateEventAssistant(eventId, updatedAssistants);
   };
 
   const toggleEventVisibility = (eventId: string) => {
@@ -73,7 +98,7 @@ const Card: React.FC<DayEvent> = ({
         {getDayName()} {day}
       </h4>
       <button
-        onClick={() => addEvent(day, false)}
+        onClick={() => addEvent(dayId, false)}
         className="bg-green-600 rounded-full p-1.5 absolute top-5 left-5"
       >
         <svg
@@ -114,13 +139,13 @@ const Card: React.FC<DayEvent> = ({
                 <>
                   <button
                     className="ml-5 p-1.5 bg-blue-500 rounded-full"
-                    onClick={() => editEvent(day, elm)}
+                    onClick={() => editEvent(dayId, elm)}
                   >
                     <img className="w-4" src="./edit.svg" alt="icono editar" />
                   </button>
                   <button
                     className="ml-5 p-1.5 bg-red-500 rounded-full"
-                    onClick={() => preRemoveEvent(day, elm.id, elm.title)}
+                    onClick={() => preRemoveEvent(dayId, elm._id, elm.title)}
                   >
                     <img className="w-4" src="./trash.svg" alt="icono borrar" />
                   </button>
@@ -130,10 +155,10 @@ const Card: React.FC<DayEvent> = ({
             <h4 className="text-lg font-semibold text-center flex justify-center">
               {elm.title} ({elm.assistants.length}){" "}
               <button
-                onClick={() => toggleEventVisibility(elm.id)}
+                onClick={() => toggleEventVisibility(elm._id)}
                 className="ml-2 text-green-500"
               >
-                {openEventId === elm.id ? (
+                {openEventId === elm._id ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -160,24 +185,24 @@ const Card: React.FC<DayEvent> = ({
                 )}
               </button>
             </h4>
-            {openEventId === elm.id && (
+            {openEventId === elm._id && (
               <div className="text-base">
-                <p className="font-semibold">Asistentes:</p>
+                <p className="font-semibold">¿Quién se apunta?</p>
                 <p>
                   {elm.assistants.length === 0
-                    ? "Sin asistentes"
-                    : elm.assistants.join(", ")}
+                    ? "De momento ni perri..."
+                    : elm.assistants.map((id) => users[id]).join(", ")}
                 </p>
                 <div className="flex justify-center mt-3">
                   <button
-                    onClick={() => updateEventAssistant(elm.id)}
+                    onClick={() => handleUpdateAssistant(elm._id)}
                     className={`py-1.5 px-3 rounded ${
-                      elm.assistants.includes(user.name)
+                      elm.assistants.includes(user.id)
                         ? "bg-red-500"
                         : "bg-green-600"
                     }`}
                   >
-                    {elm.assistants.includes(user.name)
+                    {elm.assistants.includes(user.id)
                       ? `Me borro de ${elm.title}...`
                       : `¡Me apunto a ${elm.title}!`}
                   </button>

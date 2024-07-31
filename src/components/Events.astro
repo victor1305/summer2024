@@ -1,4 +1,5 @@
 ---
+import type { DayEvents } from "../types";
 import EventsSwiper from "./EventsSwiper";
 
 interface Props {
@@ -6,67 +7,12 @@ interface Props {
     name: string;
     id: string;
   };
+  events: DayEvents[];
 }
 
-const daysEvents = [
-  {
-    day: 6,
-    events: [
-      {
-        id: "123",
-        startHour: "10",
-        startMinute: "00",
-        finishHour: "11",
-        finishMinute: "00",
-        title: "Desayuno",
-        assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
-        createdBy: 'Vicks'
-      },
-      {
-        id: "122",
-        startHour: "15",
-        startMinute: "00",
-        finishHour: "16",
-        finishMinute: "00",
-        title: "Comida",
-        assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
-        createdBy: 'Vicks'
-      },
-    ],
-  },
-  {
-    day: 7,
-    events: [
-      {
-        id:"1223",
-        startHour: "10",
-        startMinute: "00",
-        finishHour: "11",
-        finishMinute: "00",
-        title: "Desayuno",
-        assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
-        createdBy: 'Vicks'
-      },
-    ],
-  },
-  {
-    day: 8,
-    events: [
-      {
-        id: "12123",
-        startHour: "10",
-        startMinute: "00",
-        finishHour: "11",
-        finishMinute: "00",
-        title: "Desayuno",
-        assistants: ["Jessi", "Vicks", "Alicia", "Emilio"],
-        createdBy: 'Vicks'
-      },
-    ],
-  },
-];
+const { user, events } = Astro.props;
 
-const { user } = Astro.props;
+const daysEvents = events;
 ---
 
 <h2 class="font-semibold text-center pb-5">Eventos</h2>
