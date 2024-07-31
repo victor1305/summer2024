@@ -5,7 +5,7 @@ interface LoginResTypes {
   exp: string;
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -34,8 +34,5 @@ export const POST: APIRoute = async ({ request }) => {
       "Set-Cookie"
     ] = `sessionToken=${item.token}; Path=/; Expires=${expDate}; HttpOnly; Secure; SameSite=Strict`;
   }
-  return new Response(null, {
-    status: 302,
-    headers: headers,
-  });
+  return redirect("/");
 };

@@ -83,7 +83,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
 
   const createForm = async (isEdit: boolean, form: EventModalDefaultProps) => {
     if (isEdit) {
-      const res = await fetch("https://summer2024-three.vercel.app/api/events", {
+      const res = await fetch("/api/events", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
         createdBy: user.id,
         day: day,
       };
-      const res = await fetch("https://summer2024-three.vercel.app/api/events", {
+      const res = await fetch("/api/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
