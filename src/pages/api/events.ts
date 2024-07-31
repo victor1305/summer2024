@@ -4,6 +4,9 @@ import type { DayEvents, Events } from "../../types";
 export const GET: APIRoute = async () => {
   const apiSummer = import.meta.env.API_SUMMER_URL;
 
+  console.log('PRERES')
+  console.log(apiSummer)
+
   const res: Response = await fetch(`${apiSummer}cargar-eventos`);
   const resParsed = (await res.json()) as DayEvents[];
 

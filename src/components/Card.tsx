@@ -1,4 +1,4 @@
-import type React from "react";
+import  React from "react";
 import { dayName, users } from "../constants";
 import { useEffect, useState } from "react";
 
