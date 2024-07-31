@@ -1,7 +1,7 @@
 import { type APIRoute } from "astro";
 import type { DayEvents, Events } from "../../types";
 
-export const get: APIRoute = async () => {
+export const GET: APIRoute = async () => {
   const apiSummer = import.meta.env.API_SUMMER_URL;
 
   console.log('PRERES')
