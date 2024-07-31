@@ -39,7 +39,7 @@ const Card: React.FC<DayEvent> = ({
   const [openEventId, setOpenEventId] = useState<string | null>(null);
 
   const updateEventAssistant = async (eventId: string, updatedAssistants: string[]) => {
-    const res = await fetch(`http://localhost:4321/api/events/${eventId}`, {
+    const res = await fetch(`https://summer2024-three.vercel.app/api/events/${eventId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
