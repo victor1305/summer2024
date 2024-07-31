@@ -40,7 +40,7 @@ const Card: React.FC<DayEvent> = ({
 
   const updateEventAssistant = async (eventId: string, updatedAssistants: string[]) => {
     const res = await fetch(`/api/events/${eventId}`, {
-      method: "PUT",
+      method: "put",
       headers: {
         "Content-Type": "application/json",
       },

@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import DayPresentation from "../components/DayPresentation.astro";
 import Events from "../components/Events.astro";
-import { GET } from './api/events'
+import { get } from './api/events'
 
 import type { Locals } from "../types";
 
@@ -11,7 +11,7 @@ const user = {
   id: (Astro.locals as Locals).userId,
 };
 
-const eventsRes = await GET(Astro)
+const eventsRes = await get(Astro)
 const events = await eventsRes.json();
 
 const tempRes = await fetch(
