@@ -11,6 +11,8 @@ export const POST: APIRoute = async ({ request }) => {
   const password = formData.get("password");
   const apiSummer = import.meta.env.API_SUMMER_URL;
 
+  console.log('PRERES')
+  console.log(`${apiSummer}iniciar-sesion`)
   const res: Response = await fetch(`${apiSummer}iniciar-sesion`, {
     method: "POST", // Asegúrate de que el método es POST
     headers: {
@@ -19,6 +21,7 @@ export const POST: APIRoute = async ({ request }) => {
     body: JSON.stringify({ email, password }),
   });
   const item = (await res.json()) as LoginResTypes;
+  console.log(item)
   const expDate = item.exp
     ? new Date(item.exp)
     : new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000);
