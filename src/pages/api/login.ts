@@ -6,45 +6,51 @@ interface LoginResTypes {
 }
 
 export const POST: APIRoute = async ({ request, redirect }) => {
-  const formData = await request.formData();
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const apiSummer = import.meta.env.API_SUMMER_URL;
+  try {
+    const formData = await request.formData();
+    const email = formData.get("email");
+    const password = formData.get("password");
 
-  console.log('PRERES')
-  const res: Response = await fetch("https://api-tt.onrender.com/api/summer/iniciar-sesion", {
-    method: "POST", // Asegúrate de que el método es POST
-    headers: {
-      "Content-Type": "application/json", // Establece el tipo de contenido
-    },
-    body: JSON.stringify({ email, password }),
-  });
-  console.log('RES', res)
-  const item = (await res.json()) as LoginResTypes;
-  console.log('ITEM', item)
-  const expDate = item.exp
-    ? new Date(item.exp)
-    : new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000);
+    const res: Response = await fetch("https://api-tt.onrender.com/api/summer/iniciar-sesion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-  console.log('SOy EXPDATE', expDate)
-
-  const headers: Record<string, string> = {
-    Location: "/",
-  };
-
-  console.log('Soy HEADERS', headers)
-  if (res.status === 200) {
-    console.log('ENTRO')
-    headers[
-      "Set-Cookie"
-    ] = `sessionToken=${item.token}; Path=/; Expires=${expDate}; HttpOnly; Secure; SameSite=Strict`;
-  }
-  console.log('PRE RETURN')
-  return new Response(null, {
-    status: 302,
-    headers: {
-      'Location': '/',
-      'Set-Cookie': `sessionToken=${item.token}; Path=/; HttpOnly; Secure; Expires=${expDate.toUTCString()}`,
+    if (!res.ok) {
+      console.error('Error from API:', res.status, res.statusText);
+      return new Response(null, {
+        status: res.status,
+        statusText: res.statusText,
+      });
     }
-  });
+
+    const item = (await res.json()) as LoginResTypes;
+    const expDate = item.exp
+      ? new Date(item.exp)
+      : new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000);
+
+    const headers: Record<string, string> = {
+      Location: "/",
+    };
+
+    if (res.status === 200) {
+      headers[
+        "Set-Cookie"
+      ] = `sessionToken=${item.token}; Path=/; Expires=${expDate.toUTCString()}; HttpOnly; Secure; SameSite=Strict`;
+    }
+
+    return new Response(null, {
+      status: 302,
+      headers: headers,
+    });
+  } catch (error) {
+    console.error('Fetch failed:', error);
+    return new Response(null, {
+      status: 500,
+      statusText: 'Internal Server Error',
+    });
+  }
 };

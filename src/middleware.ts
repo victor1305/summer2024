@@ -1,8 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 import { jwtDecode } from "jwt-decode";
 
-import type { Locals } from "./types";
-
 interface TokenExtendedProps {
   [key: string]: string;
 }
