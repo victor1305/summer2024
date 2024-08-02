@@ -1,4 +1,4 @@
-import  React from "react";
+import React from "react";
 import {
   assistants,
   hours,
@@ -14,6 +14,7 @@ interface EventModalProps {
   setEventForm: (ev: EventModalDefaultProps) => void;
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   closeModal: () => void;
+  modalError: boolean;
 }
 
 const EventModal: React.FC<EventModalProps> = ({
@@ -23,6 +24,7 @@ const EventModal: React.FC<EventModalProps> = ({
   eventForm,
   setEventForm,
   handleCheckboxChange,
+  modalError,
   closeModal,
 }) => (
   <div
@@ -142,6 +144,13 @@ const EventModal: React.FC<EventModalProps> = ({
             </div>
           </div>
         </div>
+        {modalError && (
+          <div>
+            <p className="text-red-600 text-sm py-4">
+              Rellena al menos los campos obligatorios...
+            </p>
+          </div>
+        )}
         <div className="flex justify-center pt-4">
           <button
             className="bg-sky-600 text-white py-1 px-4 text-lg rounded"

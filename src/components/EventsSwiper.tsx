@@ -45,10 +45,12 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
   const [dayEvents, setDayEvents] = useState(daysEvents);
   const [eventForm, setEventForm] = useState(eventModalDefault);
   const [day, setDay] = useState<string | null>(null);
+  const [modalError, setModalError] = useState(false);
   const addEvent = (dayId: string, edit: boolean) => {
     setDay(dayId);
     setIsEdit(edit);
     setIsModalOpen(true);
+    setModalError(false);
   };
 
   const editEvent = (dayId: string, event: Events) => {
@@ -73,7 +75,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
       body: JSON.stringify({
         eventId: idToEditOrRemove,
         userId: user.id,
-        dayId: day
+        dayId: day,
       }),
     });
     setDayEvents((prevDayEvents) =>
@@ -93,6 +95,10 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
   };
 
   const createForm = async (isEdit: boolean, form: EventModalDefaultProps) => {
+    if (!form.title || !form.startHour || !form.startMinute) {
+      setModalError(true);
+      return;
+    }
     if (isEdit) {
       const res = await fetch("/api/events", {
         method: "PUT",
@@ -157,7 +163,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
         });
         return updatedDayEvents;
       });
-    };
+    }
     closeModal();
   };
 
@@ -227,6 +233,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
           eventForm,
           setEventForm,
           closeModal,
+          modalError,
         }}
       />
       <ConfirmModal
