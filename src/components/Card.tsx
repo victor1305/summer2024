@@ -1,10 +1,10 @@
-import  React from "react";
+import React from "react";
 import { dayName, users } from "../constants";
 import { useEffect, useState } from "react";
 
 interface DayEvent {
   day: number;
-  dayId: string
+  dayId: string;
   events: Events[];
   user: {
     name: string;
@@ -17,6 +17,7 @@ interface DayEvent {
 
 interface Events {
   _id: string;
+  link: string;
   startHour: string;
   startMinute: string;
   finishHour: string;
@@ -38,7 +39,10 @@ const Card: React.FC<DayEvent> = ({
   const [eventsList, setEvents] = useState(events);
   const [openEventId, setOpenEventId] = useState<string | null>(null);
 
-  const updateEventAssistant = async (eventId: string, updatedAssistants: string[]) => {
+  const updateEventAssistant = async (
+    eventId: string,
+    updatedAssistants: string[]
+  ) => {
     const res = await fetch("/api/events", {
       method: "PUT",
       headers: {
@@ -46,12 +50,12 @@ const Card: React.FC<DayEvent> = ({
       },
       body: JSON.stringify({ assistants: updatedAssistants, _id: eventId }),
     });
-    
+
     if (!res.ok) {
-      console.error('Error updating event assistants:', res.statusText);
+      console.error("Error updating event assistants:", res.statusText);
       return;
     }
-  
+
     const eventUpdated = await res.json();
     setEvents((prevEvents) =>
       prevEvents.map((event) => {
@@ -69,12 +73,12 @@ const Card: React.FC<DayEvent> = ({
   const handleUpdateAssistant = async (eventId: string) => {
     const event = events.find((event) => event._id === eventId);
     if (!event) return;
-  
+
     const isAssistant = event.assistants.includes(user.id);
     const updatedAssistants = isAssistant
       ? event.assistants.filter((id) => id !== user.id)
       : [...event.assistants, user.id];
-  
+
     await updateEventAssistant(eventId, updatedAssistants);
   };
 
@@ -153,6 +157,13 @@ const Card: React.FC<DayEvent> = ({
               )}
             </p>
             <h4 className="text-lg font-semibold text-center flex justify-center">
+              {elm.link && (
+                <button className="mr-3">
+                  <a href={elm.link}>
+                    <img className="w-5" src="/link.png" alt="link" />
+                  </a>
+                </button>
+              )}
               {elm.title} ({elm.assistants.length}){" "}
               <button
                 onClick={() => toggleEventVisibility(elm._id)}
@@ -186,14 +197,14 @@ const Card: React.FC<DayEvent> = ({
               </button>
             </h4>
             {openEventId === elm._id && (
-              <div className="text-base">
-                <p className="font-semibold">¿Quién se apunta?</p>
+              <div className="text-base pt-5">
+                <p className="font-semibold pb-3">¿Quién se apunta?</p>
                 <p>
                   {elm.assistants.length === 0
                     ? "De momento ni perri..."
                     : elm.assistants.map((id) => users[id]).join(", ")}
                 </p>
-                <div className="flex justify-center mt-3">
+                <div className="pt-3 flex justify-center mt-3">
                   <button
                     onClick={() => handleUpdateAssistant(elm._id)}
                     className={`py-1.5 px-3 rounded ${

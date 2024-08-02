@@ -11,6 +11,7 @@ export interface Events {
   finishHour: string;
   finishMinute: string;
   _id: string;
+  link: string;
   title: string;
   assistants: string[];
   createdBy: string;

@@ -43,6 +43,7 @@ export interface EventModalDefaultProps {
   startMinute: string;
   finishHour: string;
   finishMinute: string;
+  link: string;
   assistants: string[];
 }
 
@@ -51,6 +52,7 @@ export const eventModalDefault: EventModalDefaultProps = {
   startHour: "",
   startMinute: "",
   finishHour: "",
+  link: "",
   finishMinute: "",
   assistants: [],
 };

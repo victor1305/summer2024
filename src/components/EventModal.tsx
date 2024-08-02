@@ -55,6 +55,18 @@ const EventModal: React.FC<EventModalProps> = ({
             }
           />
         </div>
+        <div className="text-base text-gray-600 pb-8 flex flex-col">
+          <label className="mb-1">Link del sitio (Opcional): </label>
+          <input
+            className="border border-gray-500 rounded py-1 max-w-[90%] px-2"
+            type="text"
+            name="eventLink"
+            value={eventForm.link || ""}
+            onChange={(e) =>
+              setEventForm({ ...eventForm, link: e.target.value })
+            }
+          />
+        </div>
         <div className="flex justify-between pb-8 sm:justify-start">
           <div className="text-base text-gray-600 flex flex-col sm:mr-8">
             <label className="mb-1">Hora inicio: *</label>
