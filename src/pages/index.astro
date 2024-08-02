@@ -10,7 +10,7 @@ const user = {
   id: (Astro.locals as Locals).userId,
 };
 
-const eventsRes = await fetch("/api/events", { method: "GET" });
+const eventsRes = await fetch("https://api-tt.onrender.com/api/summer/cargar-eventos");
 const events = await eventsRes.json();
 
 const tempRes = await fetch(
