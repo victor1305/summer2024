@@ -12,15 +12,16 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const apiSummer = import.meta.env.API_SUMMER_URL;
 
   console.log('PRERES')
-  console.log(`${apiSummer}iniciar-sesion`)
-  const res: Response = await fetch(`${apiSummer}iniciar-sesion`, {
+  const res: Response = await fetch("https://api-tt.onrender.com/api/summer/iniciar-sesion", {
     method: "POST", // Asegúrate de que el método es POST
     headers: {
       "Content-Type": "application/json", // Establece el tipo de contenido
     },
     body: JSON.stringify({ email, password }),
   });
+  console.log('RES', res)
   const item = (await res.json()) as LoginResTypes;
+  console.log('ITEM', item)
   const expDate = item.exp
     ? new Date(item.exp)
     : new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000);
