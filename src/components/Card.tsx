@@ -159,7 +159,7 @@ const Card: React.FC<DayEvent> = ({
             <h4 className="text-lg font-semibold text-center flex justify-center">
               {elm.link && (
                 <button className="mr-3">
-                  <a href={elm.link}>
+                  <a href={elm.link} target="_blank" rel="noopener noreferrer">
                     <img className="w-5" src="/link.png" alt="link" />
                   </a>
                 </button>

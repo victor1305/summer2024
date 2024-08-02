@@ -142,9 +142,9 @@ const EventModal: React.FC<EventModalProps> = ({
               {assistants.map((elm, index) => (
                 <div
                   key={`assistant-${index}`}
-                  className="flex w-[65px] justify-between"
+                  className="flex w-[60px] justify-between"
                 >
-                  <label>{elm.name}</label>
+                  <label className="pr-1">{elm.name}</label>
                   <input
                     type="checkbox"
                     value={elm.id}
