@@ -26,14 +26,20 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     ? new Date(item.exp)
     : new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000);
 
+  console.log('SOy EXPDATE', expDate)
+
   const headers: Record<string, string> = {
     Location: "/",
   };
+
+  console.log('Soy HEADERS', headers)
   if (res.status === 200) {
+    console.log('ENTRO')
     headers[
       "Set-Cookie"
     ] = `sessionToken=${item.token}; Path=/; Expires=${expDate}; HttpOnly; Secure; SameSite=Strict`;
   }
+  console.log('PRE RETURN')
   return new Response(null, {
     status: 302,
     headers: {

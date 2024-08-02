@@ -7,7 +7,7 @@ export const GET: APIRoute = async () => {
   console.log('PRERES')
   console.log(apiSummer)
 
-  const res: Response = await fetch(`${apiSummer}cargar-eventos`);
+  const res: Response = await fetch("https://api-tt.onrender.com/api/summer/cargar-eventos");
   const resParsed = (await res.json()) as DayEvents[];
 
   return new Response(JSON.stringify(resParsed), {
@@ -22,7 +22,7 @@ export const POST: APIRoute = async ({ request }) => {
   const apiSummer = import.meta.env.API_SUMMER_URL;
 
   const requestBody = await request.json();
-  const res: Response = await fetch(`${apiSummer}crear-evento`, {
+  const res: Response = await fetch("https://api-tt.onrender.com/api/summer/crear-evento", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export const PUT: APIRoute = async ({ request }) => {
   const apiSummer = import.meta.env.API_SUMMER_URL;
 
   const requestBody = await request.json();
-  const res: Response = await fetch(`${apiSummer}actualizar-evento/${requestBody._id}`, {
+  const res: Response = await fetch(`https://api-tt.onrender.com/api/summer/actualizar-evento/${requestBody._id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
