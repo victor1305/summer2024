@@ -1,23 +1,7 @@
 import { type APIRoute } from "astro";
-import type { DayEvents, Events } from "../../types";
-
-export const GET: APIRoute = async () => {
-  const res: Response = await fetch(
-    "https://api-tt.onrender.com/api/summer/cargar-eventos"
-  );
-  const resParsed = (await res.json()) as DayEvents[];
-
-  return new Response(JSON.stringify(resParsed), {
-    status: res.status,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-};
+import type { Events } from "../../types";
 
 export const POST: APIRoute = async ({ request }) => {
-  console.log("PRERES");
-
   const requestBody = await request.json();
   const res: Response = await fetch(
     "https://api-tt.onrender.com/api/summer/crear-evento",
@@ -40,8 +24,6 @@ export const POST: APIRoute = async ({ request }) => {
 };
 
 export const PUT: APIRoute = async ({ request }) => {
-  console.log("PRERES");
-
   const requestBody = await request.json();
   const res: Response = await fetch(
     `https://api-tt.onrender.com/api/summer/actualizar-evento/${requestBody._id}`,
@@ -60,5 +42,29 @@ export const PUT: APIRoute = async ({ request }) => {
     headers: {
       "Content-Type": "application/json",
     },
+  });
+};
+
+export const DELETE: APIRoute = async ({ request }) => {
+  const requestBody = await request.json();
+  const res: Response = await fetch(
+    `https://api-tt.onrender.com/api/summer/borrar-evento/${requestBody.userId}/${requestBody.dayId}/${requestBody.eventId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!res.ok) {
+    return new Response(null, {
+      status: res.status,
+      statusText: res.statusText,
+    });
+  }
+
+  return new Response(null, {
+    status: 204,
   });
 };

@@ -64,7 +64,18 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
     setIsConfirmModalOpen(true);
   };
 
-  const removeEvent = () => {
+  const removeEvent = async () => {
+    await fetch("/api/events", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        eventId: idToEditOrRemove,
+        userId: user.id,
+        dayId: day
+      }),
+    });
     setDayEvents((prevDayEvents) =>
       prevDayEvents.map((dayEvent) => {
         if (dayEvent._id === day) {

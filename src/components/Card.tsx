@@ -39,12 +39,12 @@ const Card: React.FC<DayEvent> = ({
   const [openEventId, setOpenEventId] = useState<string | null>(null);
 
   const updateEventAssistant = async (eventId: string, updatedAssistants: string[]) => {
-    const res = await fetch(`/api/events/${eventId}`, {
+    const res = await fetch("/api/events", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ assistants: updatedAssistants }),
+      body: JSON.stringify({ assistants: updatedAssistants, _id: eventId }),
     });
     
     if (!res.ok) {
