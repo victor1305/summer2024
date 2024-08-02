@@ -20,7 +20,6 @@ export default defineConfig({
 		plugins: [
 			VitePWA({
 				registerType: "autoUpdate",
-				manifest,
 				workbox: {
 					globDirectory: ".vercel/output/static",
 					globPatterns: ["**/*.{html,js,css,woff,woff2,ttf,eot,ico}"],
