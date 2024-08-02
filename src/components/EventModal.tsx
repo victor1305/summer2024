@@ -142,7 +142,7 @@ const EventModal: React.FC<EventModalProps> = ({
               {assistants.map((elm, index) => (
                 <div
                   key={`assistant-${index}`}
-                  className="flex w-[60px] justify-between"
+                  className="flex w-[70px] justify-between items-center"
                 >
                   <label className="pr-1">{elm.name}</label>
                   <input
