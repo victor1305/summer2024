@@ -18,7 +18,7 @@ export const GET: APIRoute = async () => {
   });
 };
 
-export const post: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request }) => {
   const apiSummer = import.meta.env.API_SUMMER_URL;
 
   const requestBody = await request.json();
@@ -39,7 +39,7 @@ export const post: APIRoute = async ({ request }) => {
   });
 };
 
-export const put: APIRoute = async ({ request }) => {
+export const PUT: APIRoute = async ({ request }) => {
   const apiSummer = import.meta.env.API_SUMMER_URL;
 
   const requestBody = await request.json();

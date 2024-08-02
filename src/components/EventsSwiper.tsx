@@ -84,7 +84,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
   const createForm = async (isEdit: boolean, form: EventModalDefaultProps) => {
     if (isEdit) {
       const res = await fetch("/api/events", {
-        method: "put",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -120,7 +120,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
         day: day,
       };
       const res = await fetch("/api/events", {
-        method: "post",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },

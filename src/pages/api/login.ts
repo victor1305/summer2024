@@ -21,7 +21,6 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     body: JSON.stringify({ email, password }),
   });
   const item = (await res.json()) as LoginResTypes;
-  console.log(item)
   const expDate = item.exp
     ? new Date(item.exp)
     : new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000);
@@ -34,5 +33,11 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       "Set-Cookie"
     ] = `sessionToken=${item.token}; Path=/; Expires=${expDate}; HttpOnly; Secure; SameSite=Strict`;
   }
-  return redirect("/");
+  return new Response(null, {
+    status: 302,
+    headers: {
+      'Location': '/',
+      'Set-Cookie': `sessionToken=${item.token}; Path=/; HttpOnly; Secure; Expires=${expDate.toUTCString()}`,
+    }
+  });
 };

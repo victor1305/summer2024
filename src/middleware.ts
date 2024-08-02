@@ -25,7 +25,6 @@ const getTokenData = (cookieSessionToken: string, field: string) => {
 };
 
 export const onRequest = defineMiddleware((context, next) => {
-  (context.locals as Locals).title = "Nuevo título";
   const pathName = context.url.pathname;
   const cookieSessionToken = context.cookies.get("sessionToken")?.value;
   const isValidToken = cookieSessionToken
