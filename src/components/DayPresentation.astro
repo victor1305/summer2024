@@ -27,6 +27,15 @@ interface Props {
   }[];
 }
 
+interface FlagDataTypes {
+  updateDate: string;
+    name?: string;
+    flag: number;
+    id?: number;
+    seaState: number;
+    seaCapacity: number;
+}
+
 const { user, temp, flags } = Astro.props;
 const hour = new Date().getHours();
 
@@ -37,13 +46,14 @@ const msg =
       ? "Buenas tardes"
       : "Buenas noches";
 
-const getFlagData = (id: number) => {
+const getFlagData = (id: number): FlagDataTypes => {
   const beach = flags.find((elm) => elm.id === id);
   return (
     beach || {
       flag: 100,
       seaState: 0,
       seaCapacity: 1000,
+      updateDate:"Sin datos"
     }
   );
 };
@@ -98,6 +108,11 @@ const getFlagData = (id: number) => {
           >{ctcNames[getFlagData(1000625)?.seaCapacity]}</span
         >
       </p>
+      <p class="pl-3 lg:pl-0">
+        Actualizado: <span class="lg:pr-10"
+          >{getFlagData(1000625)?.updateDate}</span
+        >
+      </p>
     </li>
     <li class="pb-5 lg:pr-10">
       <p class="font-semibold flex lg:justify-center">
@@ -120,6 +135,11 @@ const getFlagData = (id: number) => {
         <p class="pl-3 lg:pl-0">
           Aforo: <span class="font-semibold lg:pr-10"
             >{ctcNames[getFlagData(1000624)?.seaCapacity]}</span
+          >
+        </p>
+        <p class="pl-3 lg:pl-0">
+          Actualizado: <span class="lg:pr-10"
+            >{getFlagData(1000624)?.updateDate}</span
           >
         </p>
       </p>
@@ -145,6 +165,11 @@ const getFlagData = (id: number) => {
         <p class="pl-3 lg:pl-0">
           Aforo: <span class="font-semibold lg:pr-10"
             >{ctcNames[getFlagData(1022925)?.seaCapacity]}</span
+          >
+        </p>
+        <p class="pl-3 lg:pl-0">
+          Actualizado: <span class="lg:pr-10"
+            >{getFlagData(1022925)?.updateDate}</span
           >
         </p>
       </li>
