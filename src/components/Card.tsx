@@ -93,7 +93,12 @@ const Card: React.FC<DayEvent> = ({
   };
 
   useEffect(() => {
-    setEvents(events);
+    const sortedEvents = [...events].sort((a, b) => {
+      const aStartHour = parseInt(a.startHour, 10);
+      const bStartHour = parseInt(b.startHour, 10);
+      return aStartHour - bStartHour;
+    });
+    setEvents(sortedEvents);
   }, [events]);
 
   return (
