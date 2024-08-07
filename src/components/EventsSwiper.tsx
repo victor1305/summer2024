@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 import EventModal from "./EventModal";
 import { eventModalDefault, type EventModalDefaultProps } from "../constants";
 import ConfirmModal from "./ConfirmModal";
+import SyncLoader from "react-spinners/SyncLoader";
 
 interface DayEvents {
   day: number;
@@ -47,6 +48,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
   const [eventForm, setEventForm] = useState(eventModalDefault);
   const [day, setDay] = useState<string | null>(null);
   const [modalError, setModalError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const addEvent = (dayId: string, edit: boolean) => {
     setDay(dayId);
     setIsEdit(edit);
@@ -68,6 +70,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
   };
 
   const removeEvent = async () => {
+    setLoading(true);
     await fetch("/api/events", {
       method: "DELETE",
       headers: {
@@ -93,6 +96,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
       })
     );
     setIsConfirmModalOpen(false);
+    setLoading(false);
   };
 
   const createForm = async (isEdit: boolean, form: EventModalDefaultProps) => {
@@ -100,6 +104,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
       setModalError(true);
       return;
     }
+    setLoading(true);
     if (isEdit) {
       const res = await fetch("/api/events", {
         method: "PUT",
@@ -166,6 +171,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
       });
     }
     closeModal();
+    setLoading(false);
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,6 +192,11 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
 
   return (
     <>
+      {loading && (
+        <div className="flex justify-center items-center bg-black bg-opacity-40 fixed w-screen h-screen top-0 left-0 z-50">
+          <SyncLoader size={20} color={"#ffe066"} margin={4} loading={loading} />
+        </div>
+      )}
       <Swiper
         effect={"coverflow"}
         grabCursor={true}
@@ -219,6 +230,7 @@ const EventsSwiper: React.FC<EventsSwiperProps> = ({ daysEvents, user }) => {
                 addEvent,
                 editEvent,
                 preRemoveEvent,
+                setLoading,
               }}
             />
           </SwiperSlide>

@@ -10,6 +10,7 @@ interface DayEvent {
     name: string;
     id: string;
   };
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   addEvent: (day: string, edit: boolean) => void;
   preRemoveEvent: (day: string, id: string, name: string) => void;
   editEvent: (day: string, elm: Events) => void;
@@ -35,6 +36,7 @@ const Card: React.FC<DayEvent> = ({
   addEvent,
   editEvent,
   preRemoveEvent,
+  setLoading,
 }) => {
   const [eventsList, setEvents] = useState(events);
   const [openEventId, setOpenEventId] = useState<string | null>(null);
@@ -43,6 +45,7 @@ const Card: React.FC<DayEvent> = ({
     eventId: string,
     updatedAssistants: string[]
   ) => {
+    setLoading(true);
     const res = await fetch("/api/events", {
       method: "PUT",
       headers: {
@@ -50,6 +53,7 @@ const Card: React.FC<DayEvent> = ({
       },
       body: JSON.stringify({ assistants: updatedAssistants, _id: eventId }),
     });
+    setLoading(false);
 
     if (!res.ok) {
       console.error("Error updating event assistants:", res.statusText);
